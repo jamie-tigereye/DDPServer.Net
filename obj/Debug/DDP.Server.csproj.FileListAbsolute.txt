@@ -1,0 +1,12 @@
+c:\users\jamiep\documents\visual studio 2015\Projects\DDP.Server\DDP.Server\obj\Debug\DDP.Server.csprojResolveAssemblyReference.cache
+c:\users\jamiep\documents\visual studio 2015\Projects\DDP.Server\DDP.Server\bin\Debug\DDP.Server.pdb
+c:\users\jamiep\documents\visual studio 2015\Projects\DDP.Server\DDP.Server\bin\Debug\Fleck.dll
+c:\users\jamiep\documents\visual studio 2015\Projects\DDP.Server\DDP.Server\bin\Debug\ImpromptuInterface.dll
+c:\users\jamiep\documents\visual studio 2015\Projects\DDP.Server\DDP.Server\bin\Debug\Newtonsoft.Json.dll
+c:\users\jamiep\documents\visual studio 2015\Projects\DDP.Server\DDP.Server\bin\Debug\WebSocket4Net.dll
+c:\users\jamiep\documents\visual studio 2015\Projects\DDP.Server\DDP.Server\bin\Debug\ImpromptuInterface.xml
+c:\users\jamiep\documents\visual studio 2015\Projects\DDP.Server\DDP.Server\bin\Debug\Newtonsoft.Json.xml
+c:\users\jamiep\documents\visual studio 2015\Projects\DDP.Server\DDP.Server\obj\Debug\DDP.Server.pdb
+c:\users\jamiep\documents\visual studio 2015\Projects\DDP.Server\DDP.Server\bin\Debug\DDP.Server.dll.config
+c:\users\jamiep\documents\visual studio 2015\Projects\DDP.Server\DDP.Server\bin\Debug\DDP.Server.dll
+c:\users\jamiep\documents\visual studio 2015\Projects\DDP.Server\DDP.Server\obj\Debug\DDP.Server.dll
