@@ -9,11 +9,20 @@ namespace Net.DDP.Server
 {
     public class Subscription
     {
-        public IWebSocketConnection Connection { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
+        public IWebSocketConnection Connection { get; set; }
 
-        public Subscription(string name, IWebSocketConnection connection)
+        /// <summary>
+        /// Subscription object stores name of the publication being subscribed to,
+        /// And the websocket connection subscribed to that publication.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="connection"></param>
+        public Subscription(string id, string name, IWebSocketConnection connection)
         {
+            Id = id;
             Connection = connection;
             Name = name;
         }

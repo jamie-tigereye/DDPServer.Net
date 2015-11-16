@@ -11,30 +11,53 @@ using Net.DDP.Server;
 
 namespace Net.DDP.Server
 {
-    public class Subscriptions :IEnumerable<KeyValuePair<string, Subscription>>
+    /*
+        An IEnumerable collection of clients subscribed to publications.
+    */
+    public class Subscriptions : IEnumerable<Subscription>
     {
-        private readonly Dictionary<string, Subscription> _subscriptions =
-            new Dictionary<string, Subscription>();
+        private readonly Dictionary<string, Subscription> _subscriptions;
 
-        public void Subscribe(string id, string name, IWebSocketConnection connection)
+
+        internal Subscriptions()
         {
-            _subscriptions.Add(id, new Subscription(name, connection));
+            _subscriptions = new Dictionary<string, Subscription>();
         }
 
+        /// <summary>
+        /// Subscribes a client websocket connection to a publication
+        /// </summary>
+        /// <param name="subscription"></param>
+        public void Subscribe(Subscription subscription)
+        {
+            _subscriptions.Add(subscription.Id, subscription);
+        }
+
+        /// <summary>
+        /// Removes a client websocket connection from a subscription to a publication
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="connection"></param>
         public void Unsubscribe(string id, string name, IWebSocketConnection connection)
         {
             _subscriptions.Remove(id);
         }
 
-        public IEnumerable<KeyValuePair<string, Subscription>> GetSubscriptions(string name)
+        /// <summary>
+        /// Returns an IEnumerable collection of subscriptions to publication
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public IEnumerable<Subscription> GetSubscriptions(string name)
         {
-            return _subscriptions.Where(x => x.Value.Name == name);
+            return _subscriptions.Where(subscription => subscription.Value.Name == name).Select(x => x.Value);
         }
 
 
-        public IEnumerator<KeyValuePair<string, Subscription>> GetEnumerator()
+        public IEnumerator<Subscription> GetEnumerator()
         {
-            return _subscriptions.GetEnumerator();
+            return _subscriptions.Select(subscription => subscription.Value).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -7,8 +7,8 @@
     <ProjectGuid>{CFB6F598-8874-4483-8B1B-498CD2E13913}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DDP.Server</RootNamespace>
-    <AssemblyName>DDP.Server</AssemblyName>
+    <RootNamespace>Net.DDP.Server</RootNamespace>
+    <AssemblyName>Net.DDP.Server</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -62,9 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DocumentEvent.cs" />
+    <Compile Include="EventArgs.cs" />
     <Compile Include="Interfaces\IDocument.cs" />
-    <Compile Include="DDPConnector.cs" />
+    <Compile Include="Connector.cs" />
     <Compile Include="Interfaces\INotifyDocument.cs" />
     <Compile Include="Interfaces\IProcessQueue.cs" />
     <Compile Include="Messages\AddedAfter.cs" />
@@ -91,11 +91,13 @@
     <Compile Include="MessageProcessor.cs" />
     <Compile Include="Methods.cs" />
     <Compile Include="NotifiableExpandoObject.cs" />
-    <Compile Include="DDPServer.cs" />
+    <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReactiveDocumentHelper.cs" />
     <Compile Include="ResultQueue.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="Subscriptions.cs" />
+    <Compile Include="UnsealedExpandoObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

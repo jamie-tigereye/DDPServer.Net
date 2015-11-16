@@ -78,7 +78,8 @@ namespace Net.DDP.Server
 
             try
             {
-                _server.Subscriptions.Subscribe(message.Id, message.Name, item.Key);
+                var subscription = new Subscription(message.Id, message.Name, item.Key);
+                _server.Subscriptions.Subscribe(subscription);
             }
             catch (Exception ex)
             {

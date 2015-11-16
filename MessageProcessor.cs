@@ -21,20 +21,20 @@ namespace Net.DDP.Server
             _processingMethods = processingMethods;
         }
         
+        /// <summary>
+        /// Method processes a message from the queue, invoking a suitable method by id
+        /// </summary>
+        /// <param name="item"></param>
         public void ProcessItem(KeyValuePair<IWebSocketConnection, string> item)
         {
             dynamic message = JsonConvert.DeserializeObject(item.Value);
 
             if (message.msg != null)
             {
-                foreach (var method in _processingMethods)
+                foreach (var method in _processingMethods.Where(method => message.msg == method.Key))
                 {
-                    if (message.msg == method.Key)
-                    {
-                        method.Value(new KeyValuePair<IWebSocketConnection, dynamic>(item.Key, message));
-                    }
+                    method.Value.Invoke(new KeyValuePair<IWebSocketConnection, dynamic>(item.Key, message));
                 }
-
             }
         }
     }

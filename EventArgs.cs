@@ -10,6 +10,7 @@ namespace Net.DDP.Server
 {
     public delegate void PublicationEvent(object sender, PublicationEventArgs args);
     public delegate void DocumentEvent(object sender, DocumentEventArgs args);
+
     public enum EventType
     {
         Added,
@@ -29,5 +30,4 @@ namespace Net.DDP.Server
         public ReactiveDocument Document { get; set; }
         public PropertyChangedEventArgs PropertyEventArgs { get; set; }
     }
-
 }

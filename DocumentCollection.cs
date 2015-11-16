@@ -13,7 +13,7 @@ namespace Net.DDP.Server
 {
     public class DocumentCollection : IEnumerable<KeyValuePair<string, ReactiveDocument>>
     {
-        public string Name { get; set; }
+        public string Name { get; }
 
         readonly Dictionary<string, ReactiveDocument> _documents = new Dictionary<string, ReactiveDocument>();
         
@@ -21,21 +21,16 @@ namespace Net.DDP.Server
         public event DocumentEvent Added;
         public event DocumentEvent Removed;
 
+        internal DocumentCollection(string name)
+        {
+            Name = name;
+        }
+
         protected void OnChanged(ReactiveDocument document, PropertyChangedEventArgs args)
         {
             Changed?.Invoke(this, new DocumentEventArgs() {Document = document, EventType = EventType.Changed, PropertyEventArgs = args});
         }
         
-        public IEnumerator<KeyValuePair<string, ReactiveDocument>> GetEnumerator()
-        {
-            return _documents.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
         protected void OnAdded(ReactiveDocument document)
         {
             Added?.Invoke(this, new DocumentEventArgs() {Document = document, EventType = EventType.Added});
@@ -81,6 +76,16 @@ namespace Net.DDP.Server
             var document = _documents[id];
             _documents.Remove(id);
             OnRemoved(document);
+        }
+        
+        public IEnumerator<KeyValuePair<string, ReactiveDocument>> GetEnumerator()
+        {
+            return _documents.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

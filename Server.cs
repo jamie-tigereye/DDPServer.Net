@@ -11,9 +11,9 @@ using Net.DDP.Server.Interfaces;
 
 namespace Net.DDP.Server
 {
-    public class DDPServer : IServer
+    public class Server : IServer
     {
-        private readonly DDPConnector _connector;
+        private readonly Connector _connector;
         public int Version { get; set; }
         public Methods Methods { get; set; }
         public Publications Publications { get; set; }
@@ -22,17 +22,18 @@ namespace Net.DDP.Server
         private readonly ResultQueue<KeyValuePair<IWebSocketConnection, string>> _messageQueue;
 
         private Thread _activeThread;
-        public DDPServer(int port)
+
+        public Server(int port)
         {
             Version = 1;
-            Methods = new Methods(this);
+            Methods = new Methods();
             Subscriptions = new Subscriptions();
             Publications = new Publications();
             new PublicationMethods(this).AttachMethods();
-            var msgMethods = new MessageMethods(this).GetMethods();
-            var messageProcessor = new MessageProcessor(msgMethods);
+            var messageMethods = new MessageMethods(this).GetMethods();
+            var messageProcessor = new MessageProcessor(messageMethods);
             _messageQueue = new ResultQueue<KeyValuePair<IWebSocketConnection, string>>(messageProcessor);
-            _connector = new DDPConnector(this, "127.0.0.1", port);
+            _connector = new Connector(this, "127.0.0.1", port);
         }
 
         public void Ping()

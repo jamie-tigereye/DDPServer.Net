@@ -13,6 +13,13 @@ namespace Net.DDP.Server
     {
         public string Id { get; set; }
 
+        /// <summary>
+        /// Uses JSON serialization to convert any object to a reactive document. 
+        /// Probably not the most elegant solution.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="document"></param>
+        /// <returns></returns>
         public static ReactiveDocument TryConvertDocument(string id, object document)
         {
             if (id == null)
@@ -26,6 +33,12 @@ namespace Net.DDP.Server
             return dynamicDocument;
         }
 
+        /// <summary>
+        /// Uses JSON serialization to convert an object inheriting from the IDocument 
+        /// interface to a reactive document. Probably not the most elegant solution.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
         public static ReactiveDocument TryConvertDocument(IDocument document)
         {
             if (document.Id == null)
@@ -36,18 +49,6 @@ namespace Net.DDP.Server
             var serializedObject = JsonConvert.SerializeObject(document);
             var dynamicDocument = JsonConvert.DeserializeObject<ReactiveDocument>(serializedObject);
             return dynamicDocument;
-        }
-    }
-
-    public static class ReactiveDocumentHelper
-    {
-        public static ReactiveDocument ToReactiveDocument(this IDocument document)
-        {
-            return ReactiveDocument.TryConvertDocument(document);
-        }
-        public static ReactiveDocument ToReactiveDocument(this object document, string name)
-        {
-            return ReactiveDocument.TryConvertDocument(name, document);
         }
     }
 }

@@ -9,7 +9,7 @@ using Net.DDP.Server.Interfaces;
 
 namespace Net.DDP.Server
 {
-    class DDPConnector
+    internal class Connector
     {
         private WebSocketServer _socket;
         public List<IWebSocketConnection> Connections;
@@ -19,7 +19,7 @@ namespace Net.DDP.Server
         private readonly string _ip;
         private readonly int _port;
 
-        public DDPConnector(IServer server, string ip, int port)
+        public Connector(IServer server, string ip, int port)
         {
             Connections = new List<IWebSocketConnection>();
             _server = server;
@@ -30,6 +30,7 @@ namespace Net.DDP.Server
         public void Start()
         {
             _socket = new WebSocketServer(String.Format("ws://{0}:{1}", _ip, _port));
+
             _socket.Start(socket =>
             {
                 socket.OnOpen = () => _socket_onOpen(socket);

@@ -10,24 +10,24 @@ using Net.DDP.Server;
 
 namespace Net.DDP.Server
 {
-    public class Publications : IEnumerable<KeyValuePair<string, DocumentCollection>>
+    public class Publications : IEnumerable<DocumentCollection>
     {
-        readonly Dictionary<string, DocumentCollection> _publications = new Dictionary<string, DocumentCollection>();
+        readonly Dictionary<string, DocumentCollection> _publications;
 
-        public event PublicationEvent Created;
-        public event PublicationEvent Changed;
-        public event PublicationEvent Removed;
+        public event PublicationEvent DocumentAdded;
+        public event PublicationEvent DocumentChanged;
+        public event PublicationEvent DocumentRemoved;
 
-        public IEnumerator<KeyValuePair<string, DocumentCollection>> GetEnumerator()
+        internal Publications()
         {
-            return _publications.GetEnumerator();
+            _publications = new Dictionary<string, DocumentCollection>();
         }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
+        
+        /// <summary>
+        /// Returns a new published document collection
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public DocumentCollection Publish(string name)
         {
             if (_publications.ContainsKey(name))
@@ -35,7 +35,7 @@ namespace Net.DDP.Server
                 throw new DuplicateNameException(String.Format("A publication named {0} already exists.", name));
             }
 
-            var publication = new DocumentCollection();
+            var publication = new DocumentCollection(name);
             publication.Added += Publication_DocumentAdded;
             publication.Changed += Publication_DocumentChanged;
             publication.Removed += Publication_DocumentRemoved;
@@ -43,34 +43,58 @@ namespace Net.DDP.Server
             return publication;
         }
 
+        /// <summary>
+        /// Raises an event when a document is removed from the publication
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void Publication_DocumentRemoved(object sender, DocumentEventArgs args)
         {
-            if (Removed != null)
+            if (DocumentRemoved != null)
             {
                 var name = _publications.FirstOrDefault(x => x.Value == sender).Key;
 
-                Removed(this, new PublicationEventArgs() {EventType = EventType.Removed, Name = name, Collection= (DocumentCollection)sender, Document = args.Document});
+                DocumentRemoved(this, new PublicationEventArgs() {EventType = EventType.Removed, Name = name, Collection= (DocumentCollection)sender, Document = args.Document});
             }
         }
 
+        /// <summary>
+        /// Raises an event when a document is changed within a publication
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void Publication_DocumentChanged(object sender, DocumentEventArgs args)
         {
-            if (Changed != null)
+            if (DocumentChanged != null)
             {
                 var name = _publications.FirstOrDefault(x => x.Value == sender).Key;
-
-                Changed(this, new PublicationEventArgs() { EventType = EventType.Changed, Name = name, Collection = (DocumentCollection)sender, Document = args.Document, PropertyEventArgs = args.PropertyEventArgs});
+                DocumentChanged(this, new PublicationEventArgs() { EventType = EventType.Changed, Name = name, Collection = (DocumentCollection)sender, Document = args.Document, PropertyEventArgs = args.PropertyEventArgs});
             }
         }
 
+        /// <summary>
+        /// Raises an event when a document is added to a publication
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void Publication_DocumentAdded(object sender, DocumentEventArgs args)
         {
-            if (Created != null)
+            if (DocumentAdded != null)
             {
                 var key = _publications.FirstOrDefault(x => x.Value == sender).Key;
 
-                Created(this, new PublicationEventArgs() { EventType = EventType.Added, Name = key, Collection = (DocumentCollection)sender, Document = args.Document });
+                DocumentAdded(this, new PublicationEventArgs() { EventType = EventType.Added, Name = key, Collection = (DocumentCollection)sender, Document = args.Document });
             }
+        }
+        
+        public IEnumerator<DocumentCollection> GetEnumerator()
+        {
+            return _publications.Select(x => x.Value).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

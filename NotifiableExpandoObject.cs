@@ -8,7 +8,11 @@ using System.Threading.Tasks;
 
 namespace Net.DDP.Server
 {
-    public class NotifiableExpandoObject : UnsealedExpando, INotifyPropertyChanged
+    /// <summary>
+    /// Expando object that enables classes to subscribe to property changed notifications
+    /// Inherits from the INotifyPropertyChanged interface
+    /// </summary>
+    public abstract class NotifiableExpandoObject : UnsealedExpando, INotifyPropertyChanged
     {
         protected void OnPropertyChanged(string propertyName)
         {
@@ -28,44 +32,5 @@ namespace Net.DDP.Server
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
-    }
-
-    public class UnsealedExpando : DynamicObject
-    {
-            private readonly Dictionary<string, object> _members = new Dictionary<string, object>();
-        
-            public override bool TrySetMember(SetMemberBinder binder, object value)
-            {
-                if (!_members.ContainsKey(binder.Name)) _members.Add(binder.Name, value);
-                else _members[binder.Name] = value;
-                return true;
-            }
-        
-            public override bool TryGetMember(GetMemberBinder binder, out object result)
-            {
-                if (_members.ContainsKey(binder.Name))
-                {
-                    result = _members[binder.Name];
-                    return true;
-                }
-                else
-                {
-                    return base.TryGetMember(binder, out result);
-                }
-            }
-        
-            public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
-            {
-                if (_members.ContainsKey(binder.Name) && _members[binder.Name] is Delegate)
-                {
-                    result = (_members[binder.Name] as Delegate).DynamicInvoke(args);
-                    return true;
-                }
-                else
-                {
-                    return base.TryInvokeMember(binder, args, out result);
-                }
-            }
-        
     }
 }

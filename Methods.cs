@@ -15,13 +15,12 @@ using Net.DDP.Server.Interfaces;
 namespace Net.DDP.Server
 {
     public delegate string MethodDelegate(params string[] args);
+
     public class Methods : Dictionary<string, MethodDelegate>
     {
-        private IServer _server;
-
-        public Methods(IServer server)
+        internal Methods()
         {
-            _server = server;
+
         }
         
         public new void Add(string name, MethodDelegate deligate)
@@ -34,8 +33,19 @@ namespace Net.DDP.Server
             base.Add(name, deligate);
         }
 
+        /// <summary>
+        /// Invokes a method from a dictionary of method deligates
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="params"></param>
+        /// <returns></returns>
         public string Call(string name, dynamic @params)
         {
+            if (!ContainsKey(name))
+            {
+                throw new NullReferenceException(String.Format("Unable to find a method named {0}", name));
+            }
+
             return this[name].Invoke(@params);
         }
     }
